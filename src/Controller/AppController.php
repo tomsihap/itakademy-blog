@@ -47,9 +47,12 @@ class AppController extends AbstractController {
      */
     public function messagePost(Request $request) {
 
+        $username = ucfirst($request->request->get('username'));
+        $content = $request->request->get('content');
+
         return $this->render('app/confirmMessage.html.twig', [
-            'username' => $request->request->get('username'),
-            'content'  => $request->request->get('content'),
+            'username' => $username,
+            'content'  => $content,
         ]);
     }
 }
