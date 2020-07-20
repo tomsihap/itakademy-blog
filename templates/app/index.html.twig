@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Bienvenue sur la page d'accueil du site {{ title }}</h1>
+
+    <ul>
+
+    {% for movie in movies %}
+        <li>
+            Film : {{ movie.title }} d'une durée de {{ movie.length }} min
+        </li>
+    {% endfor %}
+    </ul>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        console.log('ok');
+    </script>
+{% endblock %}
