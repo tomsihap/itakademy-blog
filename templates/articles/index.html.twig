@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tous les articles{% endblock %}
+
+{% block body %}
+
+    <h1>Liste de nos articles</h1>
+
+    <ul class="list-group">
+        {% for article in articles %}
+            <li class="list-group-item">
+                <p>
+                    <a href="{{ path('articles_show', {id: article.id }) }}">
+                        <strong>{{ article.title }}</strong>
+                    </a>
+                    créé le {{ article.createdAt | date('d/m/Y') }}
+                </p>
+                <p><small>{{ article.content }}</small></p>
+
+                <form action="{{ path('articles_delete', {id: article.id}) }}" method="post">
+                    <input type="hidden" name="token" value="{{ csrf_token("delete_article") }}">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button class="btn btn-danger btn-sm">Supprimer</button>
+                </form>
+
+                <a href="{{ path('articles_edit', {id: article.id}) }}" class="btn btn-warning">Éditer</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
