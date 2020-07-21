@@ -2,7 +2,8 @@
 
 namespace App\Controller;
 
-
+use App\Entity\Article;
+use App\Repository\ArticleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -54,5 +55,64 @@ class AppController extends AbstractController {
             'username' => $username,
             'content'  => $content,
         ]);
+    }
+
+    /**
+     * @Route("/testarticles", name="app_testarticles")
+     */
+    public function testArticle() : Response {
+
+        $manager = $this->getDoctrine()->getManager();
+
+        $article = new Article();
+        $article->setTitle("Nouvel article 2");
+        $article->setContent("foo bar baz");
+
+        $manager->persist($article);
+        $manager->flush();
+
+        dump($article);
+
+        $article->setTitle('Titre mis à jour');
+        $manager->flush();
+
+        dump($article);
+
+        $manager->remove($article);
+        $manager->flush();
+
+        dd($article);
+
+    }
+
+    /**
+     * @Route("/readarticles", name="app_readarticles")
+     */
+    public function readArticlesSansAutowiring() {
+
+        $articleRepository = $this->getDoctrine()->getRepository(Article::class);
+
+        $articles = $articleRepository->findAll();
+        dd($articles);
+    }
+
+    /**
+     * @Route("/readarticles2", name="app_readarticles")
+     * @param ArticleRepository $articleRepository
+     */
+    public function readArticlesAvecAutowiring(ArticleRepository $articleRepository) {
+
+        $articles = $articleRepository->findAll();
+        dd($articles);
+    }
+
+    /**
+     * @Route("/readOneArticle/{articleId}", name="app_read_one_article")
+     * @param ArticleRepository $articleRepository
+     * @param int $articleId
+     */
+    public function readOneArticle(ArticleRepository $articleRepository, int $articleId) {
+
+        dd($articleRepository->find($articleId) );
     }
 }
